@@ -1,17 +1,29 @@
 var total = 0;
 var id = 0;
 
+function calculateTotal(){
+    total = 0;
+    $("#creditorTable").find('.balance').each(function(i, el){
+        total += parseFloat($(el).text());
+    });
+
+    $('#total').text('$' + total.toFixed(2));
+}
+
 function removeRows() {
     $("#creditorTable").find('input:checkbox').each(function(i, el){
         if($(el).is(':checked')){
             if(i === 0){
                 $('#creditorTable').find("tr:gt(0)").remove();
+                $(el).prop('checked', false);
             }
             else{
-                document.getElementsByTagName("tr")[i].remove();
+                $(el).parents("tr").remove();
+
             }
         }
     });
+    calculateTotal();
 }
 
 function checkAll(topCheck){
@@ -33,10 +45,9 @@ $(document).ready(function(){
         newRow += '<td>' +  creditor.firstName + '</td>';
         newRow += '<td>' + creditor.lastName +  '</td>';
         newRow += '<td>' + parseFloat(creditor.minPaymentPercentage).toFixed(2) +  '</td>';
-        newRow += '<td>' + parseFloat(creditor.balance).toFixed(2) + '</td>';
+        newRow += '<td class="balance">' + parseFloat(creditor.balance).toFixed(2) + '</td>';
         newRow += '</tr>';
         total += parseFloat(creditor.balance);
-        id++;
         return newRow;
     }
     $.getJSON('https://raw.githubusercontent.com/StrategicFS/Recruitment/master/data.json', function( data ) {
@@ -45,7 +56,8 @@ $(document).ready(function(){
             toDisplay += createRow(creditorInfo);
         });
 
-        $('#creditorTable').append(toDisplay)
+        $('#creditorTable').append(toDisplay);
+        calculateTotal();
     });
 
     $( "#submit").click(function() {
@@ -56,7 +68,8 @@ $(document).ready(function(){
             data[obj.name] = obj.value;
         });
         toDisplay += createRow(data);
-        $('#creditorTable').append(toDisplay)
+        $('#creditorTable').append(toDisplay);
+        calculateTotal();
     });
 
 });
