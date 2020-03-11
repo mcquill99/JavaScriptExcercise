@@ -4,8 +4,23 @@ var id = 0;
 function removeRows() {
     $("#creditorTable").find('input:checkbox').each(function(i, el){
         if($(el).is(':checked')){
-            document.getElementsByTagName("tr")[i].remove();
+            if(i === 0){
+                $('#creditorTable').find("tr:gt(0)").remove();
+            }
+            else{
+                document.getElementsByTagName("tr")[i].remove();
+            }
         }
+    });
+}
+
+function checkAll(topCheck){
+    let checked = false;
+    if(topCheck.checked){
+        checked = true;
+    }
+    $("#creditorTable").find('input:checkbox').each(function(i, el){
+        $(el).prop('checked', checked);
     });
 }
 
