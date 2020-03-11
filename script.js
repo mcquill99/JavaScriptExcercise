@@ -32,10 +32,10 @@ $(document).ready(function(){
         newRow += '<td>' + creditor.creditorName + '</td>';
         newRow += '<td>' +  creditor.firstName + '</td>';
         newRow += '<td>' + creditor.lastName +  '</td>';
-        newRow += '<td>' + creditor.minPaymentPercentage.toFixed(2) +  '</td>';
-        newRow += '<td>' + creditor.balance.toFixed(2) + '</td>';
+        newRow += '<td>' + parseFloat(creditor.minPaymentPercentage).toFixed(2) +  '</td>';
+        newRow += '<td>' + parseFloat(creditor.balance).toFixed(2) + '</td>';
         newRow += '</tr>';
-        total += creditor.balance;
+        total += parseFloat(creditor.balance);
         id++;
         return newRow;
     }
