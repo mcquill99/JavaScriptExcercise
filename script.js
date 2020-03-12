@@ -1,15 +1,15 @@
 var total = 0;
-var id = 0;
 var totalRows = 0;
 var checkedRows = 0;
 
 function calculateTotal(){
     total = 0;
     $("#creditorTable").find('.balance').each(function(i, el){
-        total += parseFloat($(el).text());
+        let num = $(el).text().slice(1).replace(',', '');
+        total += parseFloat(num);
     });
 
-    $('#total').text('$' + total.toFixed(2));
+    $('#total').text('$' + total.toLocaleString('en', {'minimumFractionDigits':2,'maximumFractionDigits':2}));
 }
 
 function updateRows(){
@@ -72,13 +72,13 @@ function checkAll(topCheck){
 
 function createRow(creditor){
     let newRow = '';
-    newRow += '<tr class="table-info" id="' + id + '">';
+    newRow += '<tr class="table-info">';
     newRow += '<td><input type="checkbox" onclick="incCheckedRows(this)"/></td>';
     newRow += '<td>' + creditor.creditorName + '</td>';
     newRow += '<td>' +  creditor.firstName + '</td>';
     newRow += '<td>' + creditor.lastName +  '</td>';
-    newRow += '<td>' + parseFloat(creditor.minPaymentPercentage).toFixed(2) +  '</td>';
-    newRow += '<td class="balance">' + parseFloat(creditor.balance).toFixed(2) + '</td>';
+    newRow += '<td class="num text-right">' + parseFloat(creditor.minPaymentPercentage).toLocaleString('en',{'minimumFractionDigits':2,'maximumFractionDigits':2}) +  '%</td>';
+    newRow += '<td class="balance text-right">$' + parseFloat(creditor.balance).toLocaleString('en',{'minimumFractionDigits':2,'maximumFractionDigits':2}) + '</td>';
     newRow += '</tr>';
 
     total += parseFloat(creditor.balance);
@@ -109,18 +109,28 @@ $(document).ready(function(){
         var toDisplay = '';
         var formData = form.serializeArray();
         var parsedData = {};
+        var enteredData = true;
         $(formData).each(function(index, obj){
+            if(obj.value === ""){
+                alert("Please enter values for all fields");
+                enteredData = false;
+                return false;
+            }
             parsedData[obj.name] = obj.value;
         });
 
-        toDisplay += createRow(parsedData);
-        $('#creditorTable').append(toDisplay);
+        if(enteredData){
+            toDisplay += createRow(parsedData);
+            $('#creditorTable').append(toDisplay);
 
-        calculateTotal();
-        updateRows();
+            calculateTotal();
+            updateRows();
 
-        form.trigger("reset");
-        form.toggle();
+            form.trigger("reset");
+            form.toggle();
+        }
+
+
     });
 
 });

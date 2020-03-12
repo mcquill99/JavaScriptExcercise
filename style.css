@@ -1,4 +1,15 @@
 #add-form{
     display: none;
 }
+#total{
+    float: right;
+    position: relative;
+    font-weight: bold;
+}
+.info{
+    font-weight: bold;
+}
 
+.btn{
+    margin-bottom: 20px;
+}
